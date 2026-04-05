@@ -152,6 +152,89 @@ This takes about 2–3 minutes. See the next section for what it does.
 | 6. Environments | Creates `dev`, `test`, `prod` GitHub Environments; prod requires reviewer approval |
 | 7. Branch protection | Requires PR + all CI checks on `main`; enforces for admins too |
 
+## NOTE
+
+If this script bash setup/onboard-agenticcicd-newrepo.sh not works, then try this sequence of set up steps
+
+## Step 1 — Create Entra App + OIDC Federated Credentials
+ 
+ ```bash
+ export SUBSCRIPTION_ID="<your-subsciption-id>"  # PLEASE EDIT THIS
+ export TENANT_ID="<your-azure-tenant-id>"    # PLEASE EDIT THIS
+ export GITHUB_OWNER="<your-github-account-name>"   # ⚠️ EXACT case — critical for OIDC
+ export GITHUB_REPO="<your-repo-name>"
+ 
+ bash setup/azure-oidc-bootstrap-one-sp.sh
+
+Output: prints AZURE_CLIENT_ID=... — copy this value, you need it for Steps 2 & 3.
+
+--------------------------------------------------------------------------------------
+
+Step 2 — Create Terraform State Backend
+
+ export SUBSCRIPTION_ID="<your-subsciption-id>"   # PLEASE EDIT THIS
+ export LOCATION="westeurope"
+ export TFSTATE_RESOURCE_GROUP="rg-tfstate-agenticcicd"   # PLEASE EDIT THIS
+ export TFSTATE_STORAGE_ACCOUNT="sttfstateacicd12345"   # globally unique, lowercase 
+only
+ export TFSTATE_CONTAINER="tfstate"
+ export AZURE_CLIENT_ID="<value from Step 1>"           # needed for RBAC assignment  # PLEASE EDIT THIS
+ 
+ bash setup/terraform-backend-bootstrap.sh
+
+--------------------------------------------------------------------------------------
+
+Step 3 — Set GitHub Secrets & Variables
+
+ export REPO="<your-github-account-name/your-repo-name>"  # PLEASE EDIT THIS
+ export AZURE_CLIENT_ID="<value from Step 1>"
+ export AZURE_TENANT_ID="<your-azure-tenant-id>"
+ export AZURE_SUBSCRIPTION_ID="84ba9ffe-a16f-467e-acbb-b2517aeac276"
+ export TFSTATE_RESOURCE_GROUP="rg-tfstate-agenticcicd"
+ export TFSTATE_STORAGE_ACCOUNT="sttfstateacicd12345"
+ export TFSTATE_CONTAINER="tfstate"
+ 
+ bash setup/github-secrets-bootstrap.sh
+
+--------------------------------------------------------------------------------------
+
+Step 4 — Create GitHub Environments (dev / test / prod)
+
+ export REPO="Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
+ export PROD_REVIEWERS_USERS="Dhineshkumarganesan"   # GitHub username for prod 
+approval gate
+ 
+ bash setup/create-github-environments.sh
+
+--------------------------------------------------------------------------------------
+
+Step 5 — Apply Branch Protection on main
+
+ export REPO="Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
+ 
+ bash setup/branch-protection-main.sh
+
+--------------------------------------------------------------------------------------
+
+⚠️ If OIDC breaks later (repair only, not initial setup)
+
+ export AZURE_CLIENT_ID="<value from Step 1>"
+ bash setup/fix-oidc-subjects.sh
+ # Wait 2 minutes before re-running CI
+
+--------------------------------------------------------------------------------------
+
+Teardown (end of lab)
+
+ export REPO="Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
+ export SUBSCRIPTION_ID="84ba9ffe-a16f-467e-acbb-b2517aeac276"
+ export TFSTATE_RESOURCE_GROUP="rg-tfstate-agenticcicd"
+ export RUN_DESTROY_WORKFLOW="true"
+ export ENVIRONMENT="all"
+ 
+ bash setup/cleanup-lab.sh
+
+
 ---
 
 ## 5. Trigger CI
