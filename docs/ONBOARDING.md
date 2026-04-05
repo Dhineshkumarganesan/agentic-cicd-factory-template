@@ -187,10 +187,10 @@ only
 Step 3 — Set GitHub Secrets & Variables
 
  export REPO="<your-github-account-name/your-repo-name>"  # PLEASE EDIT THIS
- export AZURE_CLIENT_ID="<value from Step 1>"
- export AZURE_TENANT_ID="<your-azure-tenant-id>"
- export AZURE_SUBSCRIPTION_ID="84ba9ffe-a16f-467e-acbb-b2517aeac276"
- export TFSTATE_RESOURCE_GROUP="rg-tfstate-agenticcicd"
+ export AZURE_CLIENT_ID="<value from Step 1>"  # PLEASE EDIT THIS
+ export AZURE_TENANT_ID="<your-azure-tenant-id>"  # PLEASE EDIT THIS
+ export AZURE_SUBSCRIPTION_ID="<your-subsciption-id>"  # PLEASE EDIT THIS
+ export TFSTATE_RESOURCE_GROUP="rg-tfstate-agenticcicd" 
  export TFSTATE_STORAGE_ACCOUNT="sttfstateacicd12345"
  export TFSTATE_CONTAINER="tfstate"
  
@@ -200,8 +200,8 @@ Step 3 — Set GitHub Secrets & Variables
 
 Step 4 — Create GitHub Environments (dev / test / prod)
 
- export REPO="Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
- export PROD_REVIEWERS_USERS="Dhineshkumarganesan"   # GitHub username for prod 
+ export REPO="<your-github-account-name/your-repo-name>"  # PLEASE EDIT THIS
+ export PROD_REVIEWERS_USERS="<your-github-account/user-name>"   # GitHub username for prod 
 approval gate
  
  bash setup/create-github-environments.sh
@@ -210,7 +210,7 @@ approval gate
 
 Step 5 — Apply Branch Protection on main
 
- export REPO="Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
+ export REPO="<your-github-account-name/your-repo-name>"  # PLEASE EDIT THIS
  
  bash setup/branch-protection-main.sh
 
@@ -218,7 +218,7 @@ Step 5 — Apply Branch Protection on main
 
 ⚠️ If OIDC breaks later (repair only, not initial setup)
 
- export AZURE_CLIENT_ID="<value from Step 1>"
+ export AZURE_CLIENT_ID="<value from Step 1>"  # PLEASE EDIT THIS
  bash setup/fix-oidc-subjects.sh
  # Wait 2 minutes before re-running CI
 
@@ -226,8 +226,8 @@ Step 5 — Apply Branch Protection on main
 
 Teardown (end of lab)
 
- export REPO="Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
- export SUBSCRIPTION_ID="84ba9ffe-a16f-467e-acbb-b2517aeac276"
+ export REPO="<your-github-account-name/your-repo-name>"  # PLEASE EDIT THIS
+ export SUBSCRIPTION_ID="<your-subsciption-id>"  # PLEASE EDIT THIS
  export TFSTATE_RESOURCE_GROUP="rg-tfstate-agenticcicd"
  export RUN_DESTROY_WORKFLOW="true"
  export ENVIRONMENT="all"
