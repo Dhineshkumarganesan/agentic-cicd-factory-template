@@ -33,6 +33,9 @@ gh --version
 jq --version
 terraform version
 
+# Install github copilot cli
+ curl -fsSL https://gh.io/copilot-install | bash
+
 # Login
 az login
 az account set --subscription "$SUBSCRIPTION_ID"
