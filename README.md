@@ -1,5 +1,15 @@
 # Agentic CI/CD Factory Template (Reference Implementation)
 
+> **Audience:** Platform engineers, cloud architects, and DevOps teams building an Intent-Driven Agentic CI/CD platform.  
+> **Status:** Reference implementation of an Agentic CI/CD Factory pattern.
+
+## 📌 Quick Links
+
+- 🔹 [What this repository does](#what-this-repository-does)
+- 🔹 [How to onboard a consumer repository](#how-to-onboard-a-consumer-repository)
+- 🔹 [How intent is interpreted from contract.yml](#intent-driven-agentic-cicd-factory)
+- 🔹 [Documentation & troubleshooting](#documentation)
+
 Implements recommended Azure and GitHub workflow patterns, progressive deployment, IaC, and OIDC integration. It provides a solid, production-usable foundation for teams or projects, ready for use in production environments with organization-aligned configuration.
 Public template that provides the reusable, intent-interpreting CI/CD factory.This repository demonstrates how CI/CD can be driven by **intent**, not pipelines.
 
@@ -21,6 +31,8 @@ This enables a **single reusable CI/CD factory** to serve unlimited consumer rep
 
 👉 The consumer declares **intent**.  
 👉 The factory converts that intent into **enforced CI/CD behavior**.
+
+
 
 > **Not affiliated with Microsoft or GitHub. No warranty.**
 
