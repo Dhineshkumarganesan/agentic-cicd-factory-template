@@ -156,9 +156,11 @@ This takes about 2–3 minutes. See the next section for what it does.
 
 If this script bash setup/onboard-agenticcicd-newrepo.sh not works, then try this sequence of set up steps
 
-## Step 1 — Create Entra App + OIDC Federated Credentials
+
  
  ```bash
+Step 1 — Create Entra App + OIDC Federated Credentials
+
  export SUBSCRIPTION_ID="<your-subsciption-id>"  # PLEASE EDIT THIS
  export TENANT_ID="<your-azure-tenant-id>"    # PLEASE EDIT THIS
  export GITHUB_OWNER="<your-github-account-name>"   # ⚠️ EXACT case — critical for OIDC
@@ -233,7 +235,7 @@ Teardown (end of lab)
  export ENVIRONMENT="all"
  
  bash setup/cleanup-lab.sh
-
+```
 
 ---
 
