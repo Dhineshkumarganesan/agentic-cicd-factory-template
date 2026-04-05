@@ -1,7 +1,7 @@
 # Agentic CI/CD Factory Template (Reference Implementation)
 
 Implements recommended Azure and GitHub workflow patterns, progressive deployment, IaC, and OIDC integration. It provides a solid, production-usable foundation for teams or projects, ready for use in production environments with organization-aligned configuration.
-Public template that provides the reusable, intent-interpreting CI/CD factory
+Public template that provides the reusable, intent-interpreting CI/CD factory.This repository demonstrates how CI/CD can be driven by **intent**, not pipelines.
 
 ## 🧠 Intent-Driven Agentic CI/CD Factory
 
