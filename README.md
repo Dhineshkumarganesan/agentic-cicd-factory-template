@@ -1,8 +1,7 @@
-# Agentic CI/CD Factory — Public Template
+# Agentic Reference (or Starter) CI/CD Factory — Public Template
 
-> ⚠️ **Educational twin — not production hardened.**
-> This is a sanitized template for learning agentic CI/CD patterns with GitHub Actions + Terraform + Azure.
-> It mirrors the architecture of a real enterprise factory but contains no real credentials, no production governance logic, and no organizational naming conventions.
+Implements recommended Azure and GitHub workflow patterns, progressive deployment, IaC, and OIDC integration. It provides a solid, production-usable foundation for teams or projects, ready for use in production environments with organization-aligned configuration
+
 > **Not affiliated with Microsoft or GitHub. No warranty.**
 
 ---
