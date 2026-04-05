@@ -3,6 +3,25 @@
 Implements recommended Azure and GitHub workflow patterns, progressive deployment, IaC, and OIDC integration. It provides a solid, production-usable foundation for teams or projects, ready for use in production environments with organization-aligned configuration.
 Public template that provides the reusable, intent-interpreting CI/CD factory
 
+## 🧠 Intent-Driven Agentic CI/CD Factory
+
+This repository is not just a CI/CD template.
+
+It is an **Agentic CI/CD Factory** that interprets *deployment intent* from a consumer repository and dynamically generates the appropriate CI/CD execution.
+
+The Factory does not hardcode pipelines for specific applications.  
+Instead, it reads a `contract.yml` from the consumer repository and decides:
+
+- What type of resource is being deployed
+- Which Terraform modules to use
+- Which workflows to trigger
+- What validations and governance controls to apply
+
+This enables a **single reusable CI/CD factory** to serve unlimited consumer repositories without rewriting pipelines.
+
+👉 The consumer declares **intent**.  
+👉 The factory converts that intent into **enforced CI/CD behavior**.
+
 > **Not affiliated with Microsoft or GitHub. No warranty.**
 
 ---
