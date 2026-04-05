@@ -13,18 +13,12 @@ Implements recommended Azure and GitHub workflow patterns, progressive deploymen
 
 ## What it is
 
-A **runnable lab template** that demonstrates enterprise CI/CD patterns using:
+A **production-pattern CI/CD template** built on proven enterprise practices using:
 
 - **GitHub Actions** — CI (lint, validate, plan), CD (deploy), Destroy
 - **Terraform** — Remote state on Azure Blob Storage, OIDC auth (no stored secrets)
 - **Azure** — Resource Group + Static Website (Storage Account) + Key Vault (RBAC)
 - **Agentic patterns** — safe-outputs, minimal permissions, SHA-pinned actions, job-level OIDC
-
-## What it is not
-
-- ❌ A production-ready platform  
-- ❌ A Microsoft or GitHub endorsed solution  
-- ❌ A replacement for security review before enterprise deployment  
 
 ---
 
@@ -71,26 +65,39 @@ git add .github/workflows/ && git commit -m "chore: patch tfstate keys for my-pr
 export SUBSCRIPTION_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 export TENANT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 export LOCATION="eastus"
-export GITHUB_OWNER="your-github-username"
+export GITHUB_OWNER="your-github-username"   # ⚠️ exact case — critical for OIDC
 export GITHUB_REPO="my-project"
 export TFSTATE_RESOURCE_GROUP="rg-tfstate-my-project"
 export TFSTATE_STORAGE_ACCOUNT="sttfstatemyproject"    # globally unique, 3-24 chars
 export TFSTATE_CONTAINER="tfstate"
 ```
 
-### 4. Run onboarding
+### 4. Run setup — one script per step
 
 ```bash
-bash setup/onboard-agenticcicd-newrepo.sh
+# Step 1: Create Entra App Registration + 5 OIDC federated credentials
+bash setup/azure-oidc-bootstrap-one-sp.sh
+# ↳ prints AZURE_CLIENT_ID — export it before proceeding:
+export AZURE_CLIENT_ID="<value printed above>"
+
+# Step 2: Create Terraform state storage backend
+bash setup/terraform-backend-bootstrap.sh
+
+# Step 3: Set GitHub secrets and variables
+export REPO="${GITHUB_OWNER}/${GITHUB_REPO}"
+export AZURE_TENANT_ID="$TENANT_ID"
+export AZURE_SUBSCRIPTION_ID="$SUBSCRIPTION_ID"
+bash setup/github-secrets-bootstrap.sh
+
+# Step 4: Create dev / test / prod GitHub Environments
+export PROD_REVIEWERS_USERS="your-github-username"
+bash setup/create-github-environments.sh
+
+# Step 5: Apply branch protection on main
+bash setup/branch-protection-main.sh
 ```
 
-This single script:
-- Creates an Entra App Registration with 5 OIDC federated credentials
-- Creates the Terraform state storage backend
-- Sets GitHub secrets (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`)
-- Sets GitHub variables (`TFSTATE_RESOURCE_GROUP`, `TFSTATE_STORAGE_ACCOUNT`, `TFSTATE_CONTAINER`)
-- Creates GitHub Environments (`dev`, `test`, `prod` — prod requires approval)
-- Applies branch protection on `main`
+> See [docs/ONBOARDING.md](docs/ONBOARDING.md) for the full walkthrough with explanations.
 
 ### 5. Push and trigger CD
 
@@ -112,37 +119,67 @@ gh run view --log | grep website_endpoint
 
 ```bash
 export REPO="${GITHUB_OWNER}/${GITHUB_REPO}"
+export RUN_DESTROY_WORKFLOW=true
+export ENVIRONMENT=all
 bash setup/cleanup-lab.sh
 ```
-
----
 
 ## Repo structure
 
 ```
 .
-├── .github/workflows/
-│   ├── ci.yml                        # PR validation: lint, scan, plan
-│   ├── cd.yml                        # Deploy: dev → test → prod
-│   ├── destroy.yml                   # Destroy (manual trigger, gated)
-│   ├── _reusable-tf-ci.yml           # Reusable: TF fmt/validate/plan
-│   ├── _reusable-deploy-azure-tf.yml # Reusable: TF apply with OIDC
-│   └── _reusable-destroy-azure-tf.yml# Reusable: TF destroy with OIDC
-├── infra/envs/dev/
-│   ├── main.tf                       # RG + Storage Website + Key Vault
-│   ├── variables.tf
-│   └── outputs.tf
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml                         # PR validation: lint, scan, plan (all 3 envs)
+│   │   ├── cd.yml                         # Deploy: dev → test → prod
+│   │   ├── destroy.yml                    # Destroy (manual trigger, gated)
+│   │   ├── _reusable-tf-ci.yml            # Reusable: TF fmt/validate/plan
+│   │   ├── _reusable-deploy-azure-tf.yml  # Reusable: TF apply with OIDC
+│   │   └── _reusable-destroy-azure-tf.yml # Reusable: TF destroy with OIDC
+│   ├── agents/
+│   │   ├── terraform-module-expert.agent.md    # Scaffold any Azure resource
+│   │   ├── terraform-coordinator.agent.md      # Routes between agents
+│   │   ├── terraform-security.agent.md         # Security review
+│   │   ├── azure-architecture-reviewer.agent.md# WAF/CAF compliance
+│   │   └── terraform-provider-upgrade.agent.md # Safe provider upgrades
+│   ├── skills/
+│   │   ├── azure-verified-modules/        # AVM reference patterns
+│   │   ├── azure-architecture-review/     # Architecture review patterns
+│   │   ├── github-actions-terraform/      # CI/CD pipeline patterns
+│   │   ├── terraform-provider-upgrade/    # Provider upgrade patterns
+│   │   ├── terraform-security-scan/       # Security scan patterns
+│   │   └── drawio-mcp-diagramming/        # Architecture diagram generation
+│   └── copilot-instructions.md            # Azure architecture guidance for Copilot
+├── infra/
+│   └── envs/
+│       ├── dev/                           # Development environment
+│       │   ├── main.tf                    # Resources scaffolded via @terraform-module-expert
+│       │   ├── variables.tf
+│       │   └── outputs.tf
+│       ├── test/                          # Test environment
+│       │   ├── main.tf
+│       │   ├── variables.tf
+│       │   └── outputs.tf
+│       └── prod/                          # Production environment
+│           ├── main.tf
+│           ├── variables.tf
+│           └── outputs.tf
+├── cicd/
+│   └── contract.yml                       # Pipeline guardrails declaration
+├── scripts/
+│   └── contract_lint.py                   # Validates contract.yml in CI
+├── setup/                                 # ← Run these to onboard a new repo
+│   ├── onboard-agenticcicd-newrepo.sh     # ← Start here (runs all below)
+│   ├── azure-oidc-bootstrap-one-sp.sh     # Create Entra App + OIDC creds
+│   ├── terraform-backend-bootstrap.sh     # Create TF state storage
+│   ├── github-secrets-bootstrap.sh        # Set GitHub secrets + variables
+│   ├── create-github-environments.sh      # Create dev/test/prod environments
+│   ├── branch-protection-main.sh          # Apply main branch protection
+│   ├── patch-tfstate-keys.sh              # Rename TF state key paths
+│   └── cleanup-lab.sh                     # Destroy all resources
 ├── docs/
-│   ├── ONBOARDING.md                 # Detailed onboarding walkthrough
-│   └── TROUBLESHOOTING.md            # Common issues and fixes
-├── setup/azure-oidc-bootstrap-one-sp.sh    # Create Entra App + OIDC creds
-├── setup/terraform-backend-bootstrap.sh    # Create TF state storage
-├── setup/github-secrets-bootstrap.sh       # Set GitHub secrets + variables
-├── setup/create-github-environments.sh     # Create dev/test/prod environments
-├── setup/branch-protection-main.sh         # Apply main branch protection
-├── setup/onboard-agenticcicd-newrepo.sh    # ← Start here (runs all above)
-├── setup/patch-tfstate-keys.sh             # Rename TF state key paths
-├── setup/cleanup-lab.sh                    # Destroy all lab resources
+│   ├── ONBOARDING.md                      # Detailed onboarding walkthrough
+│   └── TROUBLESHOOTING.md                 # Common issues and fixes
 ├── .gitignore
 ├── LICENSE
 └── SECURITY.md
@@ -159,9 +196,6 @@ bash setup/cleanup-lab.sh
 | SHA-pinned actions | All `uses:` references pinned to commit SHAs |
 | No hardcoded IDs | All Azure IDs via GitHub Secrets/Variables |
 | State encryption | Azure Storage Server-Side Encryption (default) |
-| KV RBAC enabled | No vault access policy model — RBAC only |
-
----
 
 ## License
 
