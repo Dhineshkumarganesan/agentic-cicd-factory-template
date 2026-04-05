@@ -3,12 +3,15 @@
 > **Audience:** Platform engineers, cloud architects, and DevOps teams building an Intent-Driven Agentic CI/CD platform.  
 > **Status:** Reference implementation of an Agentic CI/CD Factory pattern.
 
-## 📌 Quick Links
+## 🧠 Why this matters
 
-- 🔹 [What this repository does](#what-this-repository-does)
-- 🔹 [How to onboard a consumer repository](#how-to-onboard-a-consumer-repository)
-- 🔹 [How intent is interpreted from contract.yml](#intent-driven-agentic-cicd-factory)
-- 🔹 [Documentation & troubleshooting](#documentation)
+Traditional CI/CD is **pipeline-driven**.  
+This factory is **intent-driven**.
+
+The logic of *what to deploy* lives in the consumer repo.  
+The logic of *how to deploy* lives here.
+
+---
 
 Implements recommended Azure and GitHub workflow patterns, progressive deployment, IaC, and OIDC integration. It provides a solid, production-usable foundation for teams or projects, ready for use in production environments with organization-aligned configuration.
 Public template that provides the reusable, intent-interpreting CI/CD factory.This repository demonstrates how CI/CD can be driven by **intent**, not pipelines.
