@@ -130,7 +130,7 @@ az account show --query tenantId -o tsv
 ## 4. Run onboarding script
 
 ```bash
-bash onboard-agenticcicd-newrepo.sh
+bash setup/onboard-agenticcicd-newrepo.sh
 ```
 
 This takes about 2–3 minutes. See the next section for what it does.

@@ -99,14 +99,14 @@ bash onboard-agenticcicd-newrepo.sh
 Option B — Have an Entra admin run the OIDC bootstrap step:
 ```bash
 # Admin runs this:
-bash azure-oidc-bootstrap-one-sp.sh
+bash setup/azure-oidc-bootstrap-one-sp.sh
 # Then admin provides the APP_ID (client ID) to you
 export AZURE_CLIENT_ID="<provided-by-admin>"
 # You continue with the rest:
 bash terraform-backend-bootstrap.sh
 bash github-secrets-bootstrap.sh
-bash create-github-environments.sh
-bash branch-protection-main.sh
+bash setup/create-github-environments.sh
+bash setup/branch-protection-main.sh
 ```
 
 Option C — Use Azure Portal:

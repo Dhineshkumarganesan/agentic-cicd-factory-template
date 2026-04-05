@@ -62,7 +62,7 @@ gh repo clone my-project && cd my-project
 
 ```bash
 export STATE_PREFIX="my-project"
-bash patch-tfstate-keys.sh
+bash setup/patch-tfstate-keys.sh
 git add .github/workflows/ && git commit -m "chore: patch tfstate keys for my-project"
 ```
 
@@ -82,7 +82,7 @@ export TFSTATE_CONTAINER="tfstate"
 ### 4. Run onboarding
 
 ```bash
-bash onboard-agenticcicd-newrepo.sh
+bash setup/onboard-agenticcicd-newrepo.sh
 ```
 
 This single script:
@@ -113,7 +113,7 @@ gh run view --log | grep website_endpoint
 
 ```bash
 export REPO="${GITHUB_OWNER}/${GITHUB_REPO}"
-bash cleanup-lab.sh
+bash setup/cleanup-lab.sh
 ```
 
 ---
@@ -136,14 +136,14 @@ bash cleanup-lab.sh
 ├── docs/
 │   ├── ONBOARDING.md                 # Detailed onboarding walkthrough
 │   └── TROUBLESHOOTING.md            # Common issues and fixes
-├── azure-oidc-bootstrap-one-sp.sh    # Create Entra App + OIDC creds
-├── terraform-backend-bootstrap.sh    # Create TF state storage
-├── github-secrets-bootstrap.sh       # Set GitHub secrets + variables
-├── create-github-environments.sh     # Create dev/test/prod environments
-├── branch-protection-main.sh         # Apply main branch protection
-├── onboard-agenticcicd-newrepo.sh    # ← Start here (runs all above)
-├── patch-tfstate-keys.sh             # Rename TF state key paths
-├── cleanup-lab.sh                    # Destroy all lab resources
+├── setup/azure-oidc-bootstrap-one-sp.sh    # Create Entra App + OIDC creds
+├── setup/terraform-backend-bootstrap.sh    # Create TF state storage
+├── setup/github-secrets-bootstrap.sh       # Set GitHub secrets + variables
+├── setup/create-github-environments.sh     # Create dev/test/prod environments
+├── setup/branch-protection-main.sh         # Apply main branch protection
+├── setup/onboard-agenticcicd-newrepo.sh    # ← Start here (runs all above)
+├── setup/patch-tfstate-keys.sh             # Rename TF state key paths
+├── setup/cleanup-lab.sh                    # Destroy all lab resources
 ├── .gitignore
 ├── LICENSE
 └── SECURITY.md
