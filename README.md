@@ -42,7 +42,7 @@ A **production-pattern CI/CD template** built on proven enterprise practices usi
  - GitHub Copilot CLI — Requires an active Copilot license (Get Copilot)
 ---
 
-## HOW TO USE Agentic Reference (or Starter) CI/CD Factory — Public Template
+## How to use Agentic Reference (or Starter) CI/CD Factory — Public Template
 
 > See [docs/ONBOARDING.md](docs/ONBOARDING.md) for the full walkthrough with explanations.
 
