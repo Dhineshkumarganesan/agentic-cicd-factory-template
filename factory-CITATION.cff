@@ -1,0 +1,61 @@
+cff-version: 1.2.0
+title: "Intent-Driven Agentic CI/CD Factory: A Reusable Contract-Interpreting CI/CD Platform"
+message: "If you use this factory pattern, please cite it using the metadata below."
+type: software
+authors:
+  - family-names: Ganesan
+    given-names: Dhineshkumar
+    alias: dhineshkumarganesan
+    orcid: ""  # Add your ORCID if you have one: https://orcid.org/register
+repository-code: "https://github.com/Dhineshkumarganesan/agentic-cicd-factory-template"
+url: "https://github.com/Dhineshkumarganesan/agentic-cicd-factory-template"
+date-released: "2025-04-05"
+version: "1.0.0"
+license: MIT
+abstract: >
+  This repository implements the Agentic CI/CD Factory — the intelligence layer of the
+  Intent-Driven Agentic CI/CD paradigm. The Factory is a reusable, intent-interpreting
+  CI/CD platform that reads a structured deployment contract (contract.yml) from any
+  consumer repository and autonomously determines: what type of resource is being deployed,
+  which Terraform modules to invoke, which workflows to trigger, and what governance and
+  validation controls to enforce. Unlike traditional CI/CD templates that hardcode pipeline
+  logic per application, this Factory serves unlimited consumer repositories through a
+  single reusable implementation — decoupling deployment intelligence from application
+  teams entirely. The architecture includes an AI agent layer (.github/agents/) with
+  Copilot-integrated specialists for Terraform scaffolding, security review, Azure
+  architecture compliance (WAF/CAF), and provider upgrade coordination; reusable GitHub
+  Actions workflows for CI, CD, and Destroy operations; OIDC-only authentication with
+  zero long-lived secrets; SHA-pinned actions; and multi-environment progressive promotion
+  (dev → test → prod) orchestrated by the factory. This is the platform-side counterpart
+  to the consumer reference implementation at
+  https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv.
+keywords:
+  - agentic-cicd
+  - cicd-factory
+  - intent-driven-infrastructure
+  - platform-engineering
+  - github-actions
+  - terraform
+  - azure
+  - agentic-ai
+  - contract-driven-deployment
+  - infrastructure-as-code
+  - oidc
+  - zero-secrets
+  - copilot-agents
+  - reusable-workflows
+  - devops
+  - devex
+related-identifiers:
+  - relation: isPartOf
+    type: url
+    value: "https://github.com/Dhineshkumarganesan/agenticcicdwftfstaticwebkv"
+preferred-citation:
+  type: software
+  title: "Intent-Driven Agentic CI/CD Factory: A Reusable Contract-Interpreting CI/CD Platform"
+  authors:
+    - family-names: Ganesan
+      given-names: Dhineshkumar
+  date-released: "2025-04-05"
+  url: "https://github.com/Dhineshkumarganesan/agentic-cicd-factory-template"
+  license: MIT
